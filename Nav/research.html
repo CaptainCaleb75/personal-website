@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Research</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+
+
+  <body>
+    <header class="name-header">
+      <h1 class="name">Research</h1>
+    </header>
+
+    <main>
+      <section class="title-section">
+        <p class="title">
+          Questions? Comments? Suggestions?
+        <a href="mailto:cmagill@kent.edu">cmagill@kent.edu</a>
+        </p>
+
+        <header class="bio-header">
+            <h1>Ongoing Works;</h1>
+        </header>
+      </section>
+
+      <section class="project-1">
+            <h1>Towards Sustainability</h1>
+            <p>Towards Sustainability; Stability, Fairness, and Survivability of Blockchain in the Post-Halving Era (+SoK).</p>
+            <p><b>Working Abstract:</b></p>
+            <p>Bitcoin’s network security has historically been sustained through the block subsidy; the incentive of miner participation. Though as this reward halves to zero, herein the `post-halving era’, concern arises regarding the successor candidate of incentive and its ability to maintain this security; the transaction fees. Considerable research has gone into the exploration of miner behavior patterns under this premised economic context; primarily as to understand the quantifiable conditions for which a miner will deviate from altruistic action. Furthermore, simulations contrived to deduce collective and individual behavior patterns have largely revealed the unattainable equilibrium under such circumstance, barring any practical intervention. We ourselves posit further structural risks that, if remained unresolved, threaten destabilization.
+    
+            This paper resolves to present the economy of the post-halving era as a consequence of three distinct variables: the Natural Incentive, the Security Cost, and the Transaction Fee Rate. It will additionally be argued they three variables exist in a cyclic dependency of one-another. We now move to understanding the decision-making of the mining participants to be momentary, the consequence of which serving as the basis for our proposed threat model. This thus establishes the nature of the economy.
+
+            Therefore, we must next resolve that of which the economy must achieve; a definition of Sustainability appropriate for this context. It will itself be comprised of the factors of Stability, Fairness, and Survivability. Furthermore, the overwhelming position in academia is to design mechanisms that prevent this opportunism's induction. We argue however, this opportunism can be leveraged as a means of further promoting this Sustainability as defined. We thus seek only to enforce constraints to the end that this opportunism cannot act as a destabilizing force, whilst avoiding policing the behavior outright.</p>
+            <p><b>Prose Overview:</b></p>
+            <p>This paper is largely inspired by the threat model posited in the foundational paper “On the Instability of Bitcoin Without the Block Reward”. I posit the economy of blockchain in the post-halving PoW context can be modeled as a consequence of three distinct variables. As such, the best solution to the “sustainability” of the model as a DeFi is in accordance with which these variables behave. I find academia surrounding this problem (that of the volatile-reward) to be sporadic, whereas individual contributors surmise their own relative definition of goals, and felt a contribution as to formalize the overarching essence (that of the general survivability of bitcoin) was apt.</p>
+            <p>I'm currently formalizing the relationship between these variables mathematically and would love feedback/suggestions! Feel free to reach out.</p>
+
+      </section>
+
+      <section class="project-2">
+            <h1>Revenue Capture for Pooling Mechanism Proposal</h1>
+            <p><b>Prose Overview:</b></p>
+            <p>I don’t currently have a formal abstract! This is a more recent idea I’ve conceived, and essentially building off the work from the paper “Fee-Redistribution Smart Contracts for Transaction-Fee Based Regime of Blockchains with the Longest Chain Rule”. In accordance with how I interpret “sustainability”, as with my aforementioned above endeavor, I seek to implement a means of preventing transaction order manipulation in the case of the volatile-reward model. I’ve surmised a novel means whereas; upon the block proposal from a miner, a FIFO ordering of transactions in the mempool (view according to the longest chain) is deduced (somehow. Itself a research question) and compared to the miner’s submitted list. The likeness is quantified which demonstrates an “opportunism” score of the miner which dictates to what degree their instant reward, the sum of transaction fees attached to included transactions apart of the block, is slashed and pooled. The more opportunism demonstrated (i.e. the greater degree of deviation from the FIFO list), the lesser instant reward the miner is granted. This would also more actively work to smooth the reward per-block such that the network would generally be less susceptible toward fluctuation in demand (as this is generally assumed to be constant, though of course in practice this isn’t necessarily the case).</p>
+            <p>I’m particularly interested in finding collaborators for this project! Reach out if interested.</p>
+
+      </section>
+
+    </main>
+  </body>
+</html>
