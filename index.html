@@ -116,6 +116,7 @@
   /* On narrow screens, stack: photo first, then bio, then research */
   @media (max-width: 640px) {
     .main { grid-template-columns: 1fr; }
+    .headshot { grid-column: 1; grid-row: auto; }
     .bio      { grid-column: 1; grid-row: 1; }
     .research { grid-column: 1; grid-row: 2; }
     .creative-endeavors {grid-column: 1; grid-row: 3;}
