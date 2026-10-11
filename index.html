@@ -5,11 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>magillcaleb.com</title>
 <style>
+  @font-face {
+    font-family: "SiteTitle";
+    src: url('Source/PROCIRCUIT.otf') format('opentype');
+    font-display: swap;
+  }
+
   :root {
     --red: #e61e23;
     --cream: #f2f2da;
-
-    /* Displayed width of ONE tile (the file itself is 740px wide). The animation travels exactly this far, so the loop is seamless. */
     --tile-w: 370px;
     --bg-speed: 10s;       /* time for the background to move one tile width */
     --ticker-speed: 20s;   /* time for the ticker to loop once */
@@ -23,48 +27,56 @@
     font-family: Georgia, "Times New Roman", serif;
     color: #111;
     background: var(--cream);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
 
-  /* LAYER 1: moving tiled background */
   .bg {
     position: fixed;
     inset: 0;
     z-index: -1;
-    background-image: url('Source/the_hearts.jpg');
+    background-image: url('Source/the_hearts_seamless.png');
     background-size: var(--tile-w) auto;
     background-repeat: repeat;
     animation: drift var(--bg-speed) linear infinite;
   }
+
   @keyframes drift {
-    from { background-position-x: 0; }
-    to   { background-position-x: var(--tile-w); }
+    from { background-position-x: 50%; }
+    to   { background-position-x: calc(50% + var(--tile-w)); }
   }
 
-  /* LAYER 2: the white page */
-  .page {
+  .site-bar {
     background: #fff;
-    min-height: 100vh;
-    margin: 0 var(--gutter);
+    border-bottom: 2px solid var(--red);
   }
 
-  /* Site name, sitting near the top */
   .site-head {
-    padding: 1.25rem clamp(1.25rem, 5vw, 4rem) 1.1rem;
-    text-align: left;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: clamp(1rem, 3vw, 2rem);
+    row-gap: 0.25rem;
+    padding: 1.25rem clamp(1.25rem, 5vw, 4rem) 0.5rem;
   }
   .site-head h1 {
     margin: 0;
+    font-family: "SiteTitle", Georgia, "Times New Roman", serif;
+    font-weight: normal;   /* custom fonts usually ship as a single weight; avoids faux-bold */
     font-size: clamp(1.75rem, 4vw, 2.5rem);
     letter-spacing: 0.04em;
   }
+  .resume-link {
+    color: var(--red);
+    font-size: 1.1rem;
+  }
 
-  /* Ticker: spans the full width of the white page only */
   .ticker {
     overflow: hidden;
     white-space: nowrap;
-    /*background: var(--red);*/
-    color: var(--black);
-    font-family: "Courier New", Courier, monospace;
+    color: #111;
+    font-family: "Times New Roman", Georgia, serif;
     text-transform: uppercase;
     letter-spacing: 0.12em;
     font-size: 0.95rem;
@@ -80,13 +92,15 @@
   .ticker-group span {
     padding: 0.6rem 1.5rem;
   }
-  /* The track holds two identical groups; sliding left by exactly one group loops invisibly */
   @keyframes scroll {
     from { transform: translateX(0); }
     to   { transform: translateX(-50%); }
   }
-
-  /* Bio on the left, headshot on the right */
+  .page {
+    background: #fff;
+    flex: 1;
+    margin: 0 var(--gutter);
+  }
   .main {
     display: grid;
     grid-template-columns: 1fr clamp(200px, 30%, 320px);
@@ -99,6 +113,8 @@
   .research { grid-column: 1; grid-row: 2; }
   .creative-endeavors {grid-column: 1; grid-row: 3;}
   .social-media { grid-column: 1; grid-row: 4; }
+  .substack-card { grid-column: 2; grid-row: 3; }   /* across from Creative Endeavors */
+  .tweet-card    { grid-column: 2; grid-row: 4; }   /* across from Social Media */
   .bio h2, .research h2, .creative-endeavors h2, .social-media h2 { margin: 0 0 0.75rem; font-size: 1.6rem; }
   .bio p, .research p  { margin: 0; line-height: 1.75; max-width: 60ch; }
   .social-media a, .research a, .creative-endeavors a{
@@ -110,20 +126,77 @@
     width: 100%;
     height: auto;
     display: block;
-    border: 4px solid var(--red);
+    border: 2px solid var(--red);
   }
-
-  /* On narrow screens, stack: photo first, then bio, then research */
-  @media (max-width: 640px) {
+  .feed-card {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    border: 2px solid var(--red);
+    padding: 1rem 1.1rem;
+    line-height: 1.5;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    transition: background-color 0.15s;
+  }
+  .feed-card:hover { background: var(--cream); }
+  .feed-card:focus-visible { outline: 3px solid #111; outline-offset: 3px; }
+  .feed-source { display: block; margin-bottom: 0.5rem; font-size: 0.85rem; color: var(--red); }
+  .feed-title  { display: block; margin-bottom: 0.4rem; font-size: 1.15rem; font-weight: bold; line-height: 1.3; }
+  .feed-text   { display: block; font-size: 0.95rem; }
+  .feed-excerpt {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .feed-date { display: block; margin-top: 0.6rem; font-size: 0.8rem; color: #555; }
+  @media (max-width: 760px) {
     .main { grid-template-columns: 1fr; }
     .headshot { grid-column: 1; grid-row: 1; }
     .bio      { grid-column: 1; grid-row: 2; }
     .research { grid-column: 1; grid-row: 3; }
     .creative-endeavors {grid-column: 1; grid-row: 4;}
-    .social-media { grid-column: 1; grid-row: 5; }    
+    .substack-card { grid-column: 1; grid-row: 5; }
+    .social-media { grid-column: 1; grid-row: 6; }
+    .tweet-card   { grid-column: 1; grid-row: 7; }
+    /* pull each card closer to its own section so the pairing reads clearly */
+    .substack-card, .tweet-card { margin-top: -1.25rem; }
     .headshot { order: -1; max-width: 280px; margin: 0 auto; }
   }
-
+  .site-footer {
+    background: #fff;
+    border-top: 2px solid var(--red);
+  }
+  .footer-main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 2rem clamp(1.5rem, 4vw, 3rem);
+    padding: 2rem clamp(1.25rem, 5vw, 4rem);
+  }
+  .footer-contact {
+    margin-left: auto;
+    max-width: 36ch;
+    text-align: right;
+    overflow-wrap: anywhere;
+  }
+  .footer-main h2 { margin: 0 0 0.75rem; font-size: 1.1rem; }
+  .footer-main p, .footer-main ul { margin: 0; line-height: 1.6; }
+  .footer-main ul { padding: 0; list-style: none; }
+  .footer-main li + li { margin-top: 0.35rem; }
+  .footer-main a { color: var(--red); }
+  .footer-brand {
+    margin-bottom: 0.5rem;
+    font-family: "SiteTitle", Georgia, "Times New Roman", serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.04em;
+  }
+  .footer-timestamp {
+    text-align: right;
+    font-size: 0.75rem;
+    color: #555;
+  }
   @media (prefers-reduced-motion: reduce) {
     .bg, .ticker-track { animation: none; }
   }
@@ -131,12 +204,11 @@
 </head>
 <body>
   <div class="bg" aria-hidden="true"></div>
-
-  <main class="page">
-    <header class="site-head">
+  <header class="site-bar">
+    <div class="site-head">
       <h1>magillcaleb.com</h1>
-    </header>
-
+      <a class="resume-link" href="Source/Magill_Resume_Fall26_Unofficial.pdf" target="_blank">resume >:)</a>
+    </div>
     <div class="ticker" role="marquee" aria-label="Welcome message">
       <div class="ticker-track">
         <div class="ticker-group">
@@ -153,7 +225,8 @@
         </div>
       </div>
     </div>
-
+  </header>
+  <main class="page">
     <section class="main">
       <div class="bio">
         <h2>Bio;</h2>
@@ -161,7 +234,7 @@
       </div>
       <div class="research">
         <h2>Research;</h2>
-        <p>My research background is in distributed systems whereas I presently am employed as a Research Lab Assistant apart of the Scalable Computer Architecture &amp; Emerging Technologies Laboratory (SCALE), where I work with Dr. Sharma and other faculty &amp; undergrad peers. Much of my deeper interest (mostly apparent through creative endeavors) centers around ‘perception’, and as such HCI is a sect I’ve begun familiarizing myself with. I’d like to pursue a discipline which reflects a deeper motivation of myself- I really want to make the world a better place after all, I’m working presently on a manifesto which perhaps better articulates these interests… stay tuned! Visit <a href="Subpages/research.html" target="_blank">here</a> to learn more.</p>
+        <p>My research background is in distributed systems whereas I presently am employed as a Research Lab Assistant apart of the Scalable Computer Architecture &amp; Emerging Technologies Laboratory (SCALE), where I work with Dr. Sharma and other faculty &amp; undergrad peers. Much of my deeper interest (mostly apparent through creative endeavors) centers around ‘perception’, and as such HCI is a sect I’ve begun familiarizing myself with. I’d like to pursue a discipline which reflects a deeper motivation of myself- I really want to make the world a better place after all, I’m working presently on a manifesto which perhaps better articulates these interests… stay tuned!</p>
       </div>
       <div class="creative-endeavors">
         <h2>Creative Endeavors;</h2>
@@ -170,8 +243,16 @@
           <li><a href="https://solostudiodev.com" target="_blank">Solo Studio</a></li>
           <li><a href="https://www.youtube.com/@CalMag75" target="_blank">YT Channel</a></li>
           <li><a href="https://captaincaleb75.github.io/Calebs-Concept-Notes/" target="_blank">Math Notes Archive</a></li>
+          <li><a href="https://calebscontemplations.substack.com/" target="_blank">Blog --------------------------------------------></a></li>
         </ul>
       </div>
+      <!-- Update the link, title, excerpt, and date by hand when you publish a new post -->
+      <a class="feed-card substack-card" href="https://YOUR-PUBLICATION.substack.com/p/YOUR-POST-SLUG" target="_blank" rel="noopener">
+        <span class="feed-source">Latest Blogpost</span>
+        <span class="feed-title">The Triumph of Morality</span>
+        <span class="feed-text feed-excerpt">What’s surprising, even to myself, is the ability for my morality to triumph, even in the circumstance whereas I feel at a point in which an abandonment is more than deserved.</span>
+        <span class="feed-date">Oct 2, 2026</span>
+      </a>
       <div class="social-media">
         <h2>Social Media;</h2>
         <ul>
@@ -183,8 +264,29 @@
           <li><a href="mailto:magillcalebmailinglist@gmail.com">Email (Personal)</a></li>
         </ul>
       </div>
-      <img class="headshot" src="Source/pfp.jpg">
+      <!-- Update the link, text, and date by hand when you want to feature a newer tweet -->
+      <a class="feed-card tweet-card" href="https://x.com/magillcaleb/status/2109136197578870808" target="_blank" rel="noopener">
+        <span class="feed-source">Latest on X (@magillcaleb)</span>
+        <span class="feed-text">Hello, World!</span>
+        <span class="feed-date">Oct 11, 2026</span>
+      </a>
+      <img class="headshot" src="Source/pfp.jpg" alt="Caleb Magill">
     </section>
   </main>
+  <footer class="site-footer">
+    <div class="footer-main">
+      <div>
+        <p class="footer-brand">magillcaleb.com</p>
+        <p>I need to come up w/ a good tagline... :\</p>
+      </div>
+      <div class="footer-contact">    
+        <h2>Contact</h2>
+        <p>Questions, comments, or interested in collaboration? <a href="mailto:magillcalebmailinglist@gmail.com">magillcalebmailinglist@gmail.com</a>.</p>
+      </div>
+    </div>
+    <div class="footer-timestamp">
+      <span>Last Updated: 10/11/26</span>
+    </div>
+  </footer>
 </body>
 </html>
